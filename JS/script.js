@@ -20,7 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 usernameElement.addEventListener("input", function(){
     localStorage.setItem("todo_username", usernameElement.innerText);
-})
+});
+
 // Load username from localStorage
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", handleItemClick);
