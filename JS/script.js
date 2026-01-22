@@ -22,7 +22,7 @@ deleteAllBtn.addEventListener("click", deleteAll);
 
 // --- FUNCTIONS ---
 
-// 1. Fitur Sapaan Otomatis
+// Fitur Sapaan Otomatis
 function setGreeting() {
     const hour = new Date().getHours();
     let greet = "Hello";
@@ -31,12 +31,12 @@ function setGreeting() {
     else if (hour < 18) greet = "Selamat Siang";
     else greet = "Selamat Malam";
 
-    greetingElement.innerText = `${greet}, Master!`;
+    greetingElement.innerText = `${greet}, Hari ini mau ngapain?!`;
 }
 
-// 2. Update Progress Bar
+// Update Progress Bar
 function updateProgress() {
-    const items = todoList.querySelectorAll(".todo-item"); // Ambil semua article
+    const items = todoList.querySelectorAll(".todo-item");
     const totalTodos = items.length;
     let completedTodos = 0;
 
@@ -58,7 +58,7 @@ function updateProgress() {
     }
 }
 
-// 3. Cek Tampilan Kosong & Update
+// Cek Tampilan Kosong & Update
 function checkUI() {
     const taskCount = todoList.children.length;
     if (taskCount === 0) {
@@ -77,11 +77,11 @@ function addTodo(event) {
 
     // --- PEMBUATAN ELEMEN SEMANTIC ---
     
-    // 1. Article (Container Card)
+    // Article (Container Card)
     const todoItem = document.createElement("article"); 
     todoItem.classList.add("todo-item");
 
-    // 2. Konten Teks
+    // Konten Teks
     const contentDiv = document.createElement("div");
     contentDiv.classList.add("todo-content");
     
@@ -103,7 +103,7 @@ function addTodo(event) {
     contentDiv.appendChild(taskDate);
     todoItem.appendChild(contentDiv);
 
-    // 3. Tombol Aksi
+    // Tombol Aksi
     const actionDiv = document.createElement("div");
     actionDiv.classList.add("action-btn-group");
 
@@ -123,7 +123,7 @@ function addTodo(event) {
     actionDiv.appendChild(trashBtn);
     todoItem.appendChild(actionDiv);
 
-    // 4. Bungkus dengan LI untuk struktur List yang valid
+    // Bungkus dengan LI untuk struktur List yang valid
     const listItem = document.createElement("li");
     listItem.appendChild(todoItem);
     

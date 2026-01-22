@@ -13,10 +13,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: hidden; /* Mencegah scroll double */
+    overflow-y: hidden; /* biar ga scroll double */
 }
 
-/* Background aesthetic blob */
+/* Background estetik blob */
 .background-blur {
     position: absolute;
     width: 300px;
@@ -183,12 +183,12 @@ body {
     border-radius: 10px;
 }
 
-/* Pastikan li mengambil lebar penuh */
+/* Pastiin li ambil lebar penuh */
 .todo-list li {
     width: 100%;
 }
 
-/* Styling Card per Item (Article) */
+/* Styling Card per Item */
 .todo-item {
     background: #1a1a1c;
     margin-bottom: 12px;
