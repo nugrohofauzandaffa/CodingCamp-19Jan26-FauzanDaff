@@ -54,6 +54,18 @@ body {
     -webkit-text-fill-color: transparent;
 }
 
+#username {
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.3);
+    cursor: text;
+    outline: none;
+    transition: all 0.3s;
+}
+
+#username:focus {
+    border-bottom: 2px solid #4cc9f0;
+    color: #4cc9f0;
+}
+
 .subtitle {
     color: #888;
     font-size: 0.9rem;

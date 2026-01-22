@@ -9,12 +9,19 @@ const emptyMsg = document.getElementById("empty-msg");
 const greetingElement = document.getElementById("greeting");
 const progressBarFill = document.getElementById("progress-fill");
 const progressText = document.getElementById("progress-text");
+const usernameElement = document.getElementById("username");
+const greetingTimeElement = document.getElementById("greeting-time");
 
 // --- EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
     setGreeting();
     checkUI();
 });
+
+usernameElement.addEventListener("input", function(){
+    localStorage.setItem("todo_username", usernameElement.innerText);
+})
+// Load username from localStorage
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", handleItemClick);
 filterOption.addEventListener("change", filterTodo);
@@ -31,7 +38,17 @@ function setGreeting() {
     else if (hour < 18) greet = "Selamat Siang";
     else greet = "Selamat Malam";
 
-    greetingElement.innerText = `${greet}, Hari ini mau ngapain?!`;
+    greetingElement.innerText = greet;
+}
+
+function loadName() {
+    const savedName = localStorage.getItem("todo_username");
+
+    if (savedName) {
+        usernameElement.innerText = savedName;
+    } else {
+        usernameElement.innerText = "User";
+    }
 }
 
 // Update Progress Bar
