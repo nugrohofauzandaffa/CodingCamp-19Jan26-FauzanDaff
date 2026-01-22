@@ -1,0 +1,266 @@
+/* --- RESET DASAR --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: #050505;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: hidden; /* Mencegah scroll double */
+}
+
+/* Background aesthetic blob */
+.background-blur {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(180deg, #7b2cbf, #3a0ca3);
+    filter: blur(100px);
+    z-index: -1;
+    border-radius: 50%;
+    top: 10%;
+    left: 20%;
+    opacity: 0.6;
+}
+
+.container {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(15px);
+    width: 90%;
+    max-width: 600px;
+    padding: 2.5rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* --- HEADER --- */
+.app-header {
+    margin-bottom: 25px;
+}
+
+#greeting {
+    font-size: 2rem;
+    background: linear-gradient(to right, #4cc9f0, #4361ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* --- PROGRESS BAR --- */
+.progress-container {
+    margin-bottom: 30px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-weight: 600;
+}
+
+.progress-bar-bg {
+    background: #1f1f1f;
+    height: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4cc9f0, #4361ee);
+    border-radius: 20px;
+    transition: width 0.5s ease-in-out;
+    box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+}
+
+/* --- INPUT FORM --- */
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    background: #161618;
+    padding: 8px;
+    border-radius: 16px;
+    border: 1px solid #333;
+}
+
+.todo-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+}
+
+.todo-date {
+    background: #252525;
+    border: none;
+    color: #aaa;
+    padding: 5px 10px;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.add-btn {
+    background: #4361ee;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.add-btn:hover {
+    transform: scale(1.05);
+    background: #3a56d4;
+}
+
+/* --- FILTER & CONTROL --- */
+.control-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.filter-todo, .delete-all-btn {
+    background: transparent;
+    color: #666;
+    border: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.filter-todo:hover, .delete-all-btn:hover {
+    color: white;
+}
+
+.delete-all-btn:hover {
+    color: #ff4d4d;
+}
+
+/* --- LIST ITEMS --- */
+.todo-list {
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Custom Scrollbar */
+.todo-list::-webkit-scrollbar {
+    width: 5px;
+}
+.todo-list::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+/* Pastikan li mengambil lebar penuh */
+.todo-list li {
+    width: 100%;
+}
+
+/* Styling Card per Item (Article) */
+.todo-item {
+    background: #1a1a1c;
+    margin-bottom: 12px;
+    padding: 15px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #4361ee;
+    transition: all 0.3s ease;
+}
+
+.todo-item:hover {
+    transform: translateX(5px);
+    background: #202024;
+}
+
+.todo-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Judul Tugas */
+.todo-item h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Tanggal */
+.task-date {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Tombol Aksi */
+.action-btn-group button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    margin-left: 10px;
+    transition: transform 0.2s;
+}
+
+.check-btn { color: #2ecc71; }
+.trash-btn { color: #ff4d4d; }
+
+.action-btn-group button:hover {
+    transform: scale(1.2);
+}
+
+/* STATUS: COMPLETED */
+.completed {
+    opacity: 0.5;
+    border-left-color: #2ecc71;
+}
+.completed h3 {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    display: none;
+    color: #555;
+}
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
