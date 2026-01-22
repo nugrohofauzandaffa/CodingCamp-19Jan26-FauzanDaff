@@ -15,6 +15,7 @@ const greetingTimeElement = document.getElementById("greeting-time");
 // --- EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
     setGreeting();
+    loadName();
     checkUI();
 });
 
@@ -49,7 +50,7 @@ function setGreeting() {
 function loadName() {
     const savedName = localStorage.getItem("todo_username");
 
-    if (savedName) {
+    if (savedName && savedName.trim() !== "") {
         usernameElement.innerText = savedName;
     } else {
         usernameElement.innerText = "User";
