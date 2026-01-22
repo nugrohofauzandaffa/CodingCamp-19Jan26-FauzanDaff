@@ -38,7 +38,11 @@ function setGreeting() {
     else if (hour < 18) greet = "Selamat Siang";
     else greet = "Selamat Malam";
 
-    greetingElement.innerText = greet;
+    const greetingTimeElement = document.getElementById("greeting-time");
+
+    if (greetingTimeElement) {
+        greetingTimeElement.innerText = greet;
+    }
 }
 
 function loadName() {
