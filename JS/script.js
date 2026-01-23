@@ -1,16 +1,17 @@
 // --- SELECTORS ---
 const todoInput = document.querySelector(".todo-input");
 const todoDate = document.querySelector(".todo-date");
+const prioritySelect = document.getElementById("priority-select"); // Selector Prioritas
+const searchInput = document.getElementById("search-input");     // Selector Search
 const todoButton = document.querySelector(".add-btn");
 const todoList = document.querySelector(".todo-list");
 const filterOption = document.querySelector(".filter-todo");
 const deleteAllBtn = document.querySelector(".delete-all-btn");
 const emptyMsg = document.getElementById("empty-msg");
-const greetingElement = document.getElementById("greeting");
+const greetingTimeElement = document.getElementById("greeting-time");
+const usernameElement = document.getElementById("username");
 const progressBarFill = document.getElementById("progress-fill");
 const progressText = document.getElementById("progress-text");
-const usernameElement = document.getElementById("username");
-const greetingTimeElement = document.getElementById("greeting-time");
 
 // --- EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,54 +20,171 @@ document.addEventListener("DOMContentLoaded", () => {
     checkUI();
 });
 
-usernameElement.addEventListener("input", function(){
-    localStorage.setItem("todo_username", usernameElement.innerText);
-});
-
-// Load username from localStorage
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", handleItemClick);
 filterOption.addEventListener("change", filterTodo);
 deleteAllBtn.addEventListener("click", deleteAll);
 
+// Listener Search (Real-time)
+searchInput.addEventListener("input", function() {
+    const searchText = searchInput.value.toLowerCase();
+    const items = todoList.querySelectorAll("li");
+
+    items.forEach(item => {
+        const text = item.querySelector("h3").innerText.toLowerCase();
+        if (text.includes(searchText)) {
+            item.style.display = "block";
+        } else {
+            item.style.display = "none";
+        }
+    });
+});
+
+// Listener Simpan Nama User
+usernameElement.addEventListener("input", () => {
+    localStorage.setItem("todo_username", usernameElement.innerText);
+});
+
 // --- FUNCTIONS ---
 
-// Fitur Sapaan Otomatis
+// 1. Sapaan Waktu & Nama
 function setGreeting() {
     const hour = new Date().getHours();
     let greet = "Hello";
-    
-    if (hour < 12) greet = "Selamat Pagi";
-    else if (hour < 18) greet = "Selamat Siang";
+    if (hour >= 5 && hour < 12) greet = "Selamat Pagi";
+    else if (hour >= 12 && hour < 15) greet = "Selamat Siang";
+    else if (hour >= 15 && hour < 18) greet = "Selamat Sore";
     else greet = "Selamat Malam";
-
-    const greetingTimeElement = document.getElementById("greeting-time");
-
-    if (greetingTimeElement) {
-        greetingTimeElement.innerText = greet;
-    }
+    
+    if (greetingTimeElement) greetingTimeElement.innerText = greet;
 }
 
 function loadName() {
     const savedName = localStorage.getItem("todo_username");
+    if (savedName) usernameElement.innerText = savedName;
+}
 
-    if (savedName && savedName.trim() !== "") {
-        usernameElement.innerText = savedName;
-    } else {
-        usernameElement.innerText = "User";
+// 2. Add Todo (Dengan Priority & Sort)
+function addTodo(event) {
+    event.preventDefault();
+    if (todoInput.value === "") return;
+
+    // A. Buat Struktur Semantic Article
+    const todoItem = document.createElement("article"); 
+    todoItem.classList.add("todo-item");
+
+    // B. Konten Kiri (Judul, Tanggal, Badge)
+    const contentDiv = document.createElement("div");
+    contentDiv.classList.add("todo-content");
+    
+    const taskTitle = document.createElement("h3");
+    taskTitle.innerText = todoInput.value;
+    
+    // Wrapper untuk Tanggal dan Badge
+    const metaDiv = document.createElement("div");
+    metaDiv.classList.add("task-meta");
+
+    // Badge Prioritas
+    const priority = prioritySelect.value;
+    const priorityBadge = document.createElement("span");
+    priorityBadge.innerText = priority;
+    priorityBadge.classList.add("priority-badge", `p-${priority}`);
+
+    // Tanggal
+    const taskDate = document.createElement("time");
+    taskDate.innerText = todoDate.value ? todoDate.value : "No Date";
+    taskDate.classList.add("task-date");
+
+    metaDiv.appendChild(priorityBadge);
+    metaDiv.appendChild(taskDate);
+
+    contentDiv.appendChild(taskTitle);
+    contentDiv.appendChild(metaDiv);
+    todoItem.appendChild(contentDiv);
+
+    // C. Tombol Aksi Kanan
+    const actionDiv = document.createElement("div");
+    actionDiv.classList.add("action-btn-group");
+
+    const checkBtn = document.createElement("button");
+    checkBtn.innerHTML = '&#10003;';
+    checkBtn.classList.add("check-btn");
+    checkBtn.setAttribute("aria-label", "Selesai");
+    
+    const trashBtn = document.createElement("button");
+    trashBtn.innerHTML = '&#10005;';
+    trashBtn.classList.add("trash-btn");
+    trashBtn.setAttribute("aria-label", "Hapus");
+
+    actionDiv.appendChild(checkBtn);
+    actionDiv.appendChild(trashBtn);
+    todoItem.appendChild(actionDiv);
+
+    // D. Bungkus dengan LI
+    const listItem = document.createElement("li");
+    listItem.appendChild(todoItem);
+    
+    todoList.appendChild(listItem);
+    
+    // E. Reset & Sortir Otomatis
+    todoInput.value = "";
+    sortTodo(); // <-- TUGAS BARU LANGSUNG DIURUTKAN
+    checkUI();
+}
+
+// 3. Auto Sort (High Priority di Atas)
+function sortTodo() {
+    const items = Array.from(todoList.children);
+    const priorityWeight = { "high": 3, "medium": 2, "low": 1 };
+
+    items.sort((a, b) => {
+        // Ambil text dari badge, lalu lowercase
+        const priorityA = a.querySelector(".priority-badge").innerText.toLowerCase();
+        const priorityB = b.querySelector(".priority-badge").innerText.toLowerCase();
+        // Bandingkan bobot
+        return priorityWeight[priorityB] - priorityWeight[priorityA];
+    });
+
+    items.forEach(item => todoList.appendChild(item));
+}
+
+// 4. Handle Click (Delete & Check)
+function handleItemClick(event) {
+    const item = event.target;
+    const todoArticle = item.closest(".todo-item"); 
+    const listRow = item.closest("li");
+
+    if (!todoArticle) return;
+
+    if (item.classList.contains("trash-btn")) {
+        todoArticle.style.opacity = "0";
+        todoArticle.style.transform = "translateX(20px)";
+        setTimeout(() => {
+            if(listRow) listRow.remove(); 
+            checkUI();
+        }, 300);
+    }
+
+    if (item.classList.contains("check-btn")) {
+        todoArticle.classList.toggle("completed");
+        if(todoArticle.classList.contains("completed")){
+            item.disabled = true;
+            item.style.opacity = "0.3";
+            item.style.cursor = "not-allowed";
+        }
+        checkUI();
+        filterTodo({ target: filterOption });
     }
 }
 
-// Update Progress Bar
+// 5. Update Progress & Confetti
 function updateProgress() {
     const items = todoList.querySelectorAll(".todo-item");
     const totalTodos = items.length;
     let completedTodos = 0;
 
     items.forEach(todo => {
-        if (todo.classList.contains("completed")) {
-            completedTodos++;
-        }
+        if (todo.classList.contains("completed")) completedTodos++;
     });
 
     const percent = totalTodos === 0 ? 0 : Math.round((completedTodos / totalTodos) * 100);
@@ -74,14 +192,19 @@ function updateProgress() {
     progressBarFill.style.width = `${percent}%`;
     progressText.innerText = `${percent}% Selesai`;
     
+    // Efek Perayaan jika 100%
     if(percent === 100 && totalTodos > 0) {
         progressBarFill.style.background = "#2ecc71";
+        progressBarFill.style.boxShadow = "0 0 20px #2ecc71"; // Glow hijau
+        greetingTimeElement.innerText = "🏆 Luar Biasa"; // Ganti sapaan
     } else {
         progressBarFill.style.background = "linear-gradient(90deg, #4cc9f0, #4361ee)";
+        progressBarFill.style.boxShadow = "none";
+        setGreeting(); // Kembalikan sapaan waktu jika belum 100%
     }
 }
 
-// Cek Tampilan Kosong & Update
+// 6. Utility Functions
 function checkUI() {
     const taskCount = todoList.children.length;
     if (taskCount === 0) {
@@ -94,104 +217,6 @@ function checkUI() {
     updateProgress();
 }
 
-function addTodo(event) {
-    event.preventDefault();
-    if (todoInput.value === "") return;
-
-    // --- PEMBUATAN ELEMEN SEMANTIC ---
-    
-    // Article (Container Card)
-    const todoItem = document.createElement("article"); 
-    todoItem.classList.add("todo-item");
-
-    // Konten Teks
-    const contentDiv = document.createElement("div");
-    contentDiv.classList.add("todo-content");
-    
-    // Judul menggunakan H3
-    const taskTitle = document.createElement("h3");
-    taskTitle.innerText = todoInput.value;
-    
-    // Tanggal menggunakan Time
-    const taskDate = document.createElement("time");
-    if(todoDate.value) {
-        taskDate.setAttribute("datetime", todoDate.value);
-        taskDate.innerText = todoDate.value;
-    } else {
-        taskDate.innerText = "Hari ini";
-    }
-    taskDate.classList.add("task-date");
-
-    contentDiv.appendChild(taskTitle);
-    contentDiv.appendChild(taskDate);
-    todoItem.appendChild(contentDiv);
-
-    // Tombol Aksi
-    const actionDiv = document.createElement("div");
-    actionDiv.classList.add("action-btn-group");
-
-    // Tombol Check
-    const checkBtn = document.createElement("button");
-    checkBtn.innerHTML = '&#10003;';
-    checkBtn.classList.add("check-btn");
-    checkBtn.setAttribute("aria-label", "Tandai Selesai");
-    
-    // Tombol Trash
-    const trashBtn = document.createElement("button");
-    trashBtn.innerHTML = '&#10005;';
-    trashBtn.classList.add("trash-btn");
-    trashBtn.setAttribute("aria-label", "Hapus Tugas");
-
-    actionDiv.appendChild(checkBtn);
-    actionDiv.appendChild(trashBtn);
-    todoItem.appendChild(actionDiv);
-
-    // Bungkus dengan LI untuk struktur List yang valid
-    const listItem = document.createElement("li");
-    listItem.appendChild(todoItem);
-    
-    todoList.appendChild(listItem);
-    
-    todoInput.value = "";
-    checkUI();
-}
-
-function handleItemClick(event) {
-    const item = event.target;
-    // Cari elemen article (untuk visual/class)
-    const todoArticle = item.closest(".todo-item"); 
-    // Cari elemen li (untuk dihapus strukturnya)
-    const listRow = item.closest("li");
-
-    if (!todoArticle) return;
-
-    // HAPUS TUGAS
-    if (item.classList.contains("trash-btn")) {
-        todoArticle.style.opacity = "0";
-        todoArticle.style.transform = "translateX(20px)";
-        
-        // Tunggu animasi selesai baru hapus LI
-        setTimeout(() => {
-            if(listRow) listRow.remove(); 
-            checkUI();
-        }, 300);
-    }
-
-    // CEKLIS TUGAS
-    if (item.classList.contains("check-btn")) {
-        todoArticle.classList.toggle("completed");
-        
-        // Disable tombol jika sudah selesai
-        if(todoArticle.classList.contains("completed")){
-            item.disabled = true;
-            item.style.opacity = "0.3";
-            item.style.cursor = "not-allowed";
-        }
-        checkUI();
-        filterTodo({ target: filterOption });
-    }
-}
-
 function deleteAll(event) {
     event.preventDefault();
     if(confirm("Yakin mau hapus semua tugas?")) {
@@ -201,30 +226,23 @@ function deleteAll(event) {
 }
 
 function filterTodo(event) {
-    const listItems = todoList.children; // Ini adalah koleksi LI
+    const listItems = todoList.children;
     const filterValue = event.target.value;
 
     Array.from(listItems).forEach(function(li) {
         const article = li.querySelector(".todo-item");
         if (!article) return;
-
         switch (filterValue) {
             case "all":
                 li.style.display = "block";
                 break;
             case "completed":
-                if (article.classList.contains("completed")) {
-                    li.style.display = "block";
-                } else {
-                    li.style.display = "none";
-                }
+                if (article.classList.contains("completed")) li.style.display = "block";
+                else li.style.display = "none";
                 break;
             case "uncompleted":
-                if (!article.classList.contains("completed")) {
-                    li.style.display = "block";
-                } else {
-                    li.style.display = "none";
-                }
+                if (!article.classList.contains("completed")) li.style.display = "block";
+                else li.style.display = "none";
                 break;
         }
     });

@@ -13,10 +13,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-y: hidden; /* biar ga scroll double */
+    overflow-y: hidden; 
 }
 
-/* Background estetik blob */
+/* Background Blur */
 .background-blur {
     position: absolute;
     width: 300px;
@@ -44,7 +44,7 @@ body {
 /* --- HEADER --- */
 .app-header {
     margin-bottom: 25px;
-    animation: fadeIn 1.5s ease-in-out;
+    animation: fadeIn 1s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -52,12 +52,17 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-#greeting {
+.app-header h1 {
     font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+#greeting-time {
     background: linear-gradient(to right, #4cc9f0, #4361ee);
     -webkit-background-clip: text;
-    background-clip: text;
+    background-clip: text; /* Standar */
     -webkit-text-fill-color: transparent;
+    color: transparent; 
 }
 
 #username {
@@ -75,12 +80,11 @@ body {
 .subtitle {
     color: #888;
     font-size: 0.9rem;
-    margin-top: 5px;
 }
 
 /* --- PROGRESS BAR --- */
 .progress-container {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .progress-info {
@@ -104,11 +108,32 @@ body {
     width: 0%;
     background: linear-gradient(90deg, #4cc9f0, #4361ee);
     border-radius: 20px;
-    transition: width 0.5s ease-in-out;
-    box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+    transition: width 0.5s ease-in-out, box-shadow 0.3s;
 }
 
-/* --- INPUT FORM --- */
+/* --- SEARCH BAR (NEW) --- */
+.search-container {
+    margin-bottom: 15px;
+}
+
+#search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    padding: 12px 15px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+#search-input:focus {
+    border-color: #4cc9f0;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- INPUT GROUP --- */
 .input-group {
     display: flex;
     gap: 10px;
@@ -117,15 +142,29 @@ body {
     padding: 8px;
     border-radius: 16px;
     border: 1px solid #333;
+    flex-wrap: wrap; /* Agar responsif di HP */
 }
 
 .todo-input {
     flex: 1;
     background: transparent;
     border: none;
-    padding: 10px 15px;
+    padding: 10px;
     color: white;
     font-size: 1rem;
+    outline: none;
+    min-width: 150px;
+}
+
+/* Priority Select Styling */
+.priority-select {
+    background: #252525;
+    color: #ccc;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
     outline: none;
 }
 
@@ -159,7 +198,7 @@ body {
     background: #3a56d4;
 }
 
-/* --- FILTER & CONTROL --- */
+/* --- CONTROL & LIST --- */
 .control-group {
     display: flex;
     justify-content: space-between;
@@ -170,21 +209,14 @@ body {
     background: transparent;
     color: #666;
     border: none;
-    font-size: 0.85rem;
     cursor: pointer;
     font-weight: 500;
     transition: color 0.3s;
 }
 
-.filter-todo:hover, .delete-all-btn:hover {
-    color: white;
-}
+.filter-todo:hover, .delete-all-btn:hover { color: white; }
+.delete-all-btn:hover { color: #ff4d4d; }
 
-.delete-all-btn:hover {
-    color: #ff4d4d;
-}
-
-/* --- LIST ITEMS --- */
 .todo-list {
     list-style: none;
     max-height: 300px;
@@ -192,21 +224,11 @@ body {
     padding-right: 5px;
 }
 
-/* Custom Scrollbar */
-.todo-list::-webkit-scrollbar {
-    width: 5px;
-}
-.todo-list::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-}
+.todo-list::-webkit-scrollbar { width: 5px; }
+.todo-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.todo-list li { width: 100%; }
 
-/* Pastiin li ambil lebar penuh */
-.todo-list li {
-    width: 100%;
-}
-
-/* Styling Card per Item */
+/* --- TODO ITEM CARD --- */
 .todo-item {
     background: #1a1a1c;
     margin-bottom: 12px;
@@ -229,21 +251,53 @@ body {
     flex-direction: column;
 }
 
-/* Judul Tugas */
 .todo-item h3 {
     font-size: 1rem;
     font-weight: 500;
     margin: 0;
 }
 
-/* Tanggal */
+.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
 .task-date {
     font-size: 0.75rem;
     color: #666;
-    margin-top: 4px;
 }
 
-/* Tombol Aksi */
+/* PRIORITY BADGES */
+.priority-badge {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.p-high { 
+    background: rgba(255, 77, 77, 0.2); 
+    color: #ff4d4d; 
+    border: 1px solid #ff4d4d; 
+    box-shadow: 0 0 5px rgba(255, 77, 77, 0.4);
+}
+
+.p-medium { 
+    background: rgba(255, 166, 0, 0.2); 
+    color: orange; 
+    border: 1px solid orange; 
+}
+
+.p-low { 
+    background: rgba(76, 201, 240, 0.2); 
+    color: #4cc9f0; 
+    border: 1px solid #4cc9f0; 
+}
+
+/* ACTION BUTTONS */
 .action-btn-group button {
     background: none;
     border: none;
@@ -253,14 +307,19 @@ body {
     transition: transform 0.2s;
 }
 
-.check-btn { color: #2ecc71; }
-.trash-btn { color: #ff4d4d; }
-
-.action-btn-group button:hover {
-    transform: scale(1.2);
+.check-btn { 
+    color: #2ecc71; 
 }
 
-/* STATUS: COMPLETED */
+.trash-btn { 
+    color: #ff4d4d; 
+}
+
+.action-btn-group button:hover { 
+    transform: scale(1.2); 
+}
+
+/* COMPLETED STATE */
 .completed {
     opacity: 0.5;
     border-left-color: #2ecc71;
@@ -270,15 +329,15 @@ body {
     color: #888;
 }
 
-/* Empty State */
+
 .empty-state {
     text-align: center;
     padding: 40px 0;
     display: none;
     color: #555;
 }
-.empty-icon {
-    font-size: 3rem;
-    margin-bottom: 10px;
-    opacity: 0.5;
+
+.empty-icon { 
+    font-size: 3rem; 
+    margin-bottom: 10px;     opacity: 0.5; 
 }

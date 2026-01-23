@@ -15,13 +15,13 @@
         
         <header class="app-header">
             <h1>
-                <span id="greeting-time">Hello</span>
+                <span id="greeting-time">Hello</span>, 
                 <span id="username" contenteditable="true">User</span>
             </h1>
             <p class="subtitle">Apa fokus utamamu hari ini?</p>
         </header>
 
-        <section class="progress-container" aria-label="Status Progress Harian">
+        <section class="progress-container" aria-label="Status Progress">
             <div class="progress-info">
                 <span>Progress Harian</span>
                 <span id="progress-text">0%</span>
@@ -30,12 +30,22 @@
                 <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
         </section>
+
+        <section class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 Cari tugasmu di sini..." aria-label="Cari Tugas">
+        </section>
         
         <form class="input-group">
             <label for="new-task" style="display:none;">Nama Tugas</label>
             <input type="text" id="new-task" class="todo-input" placeholder="Tulis tugas baru...">
             
-            <label for="task-date" style="display:none;">Tenggat Waktu</label>
+            <select id="priority-select" class="priority-select" aria-label="Pilih Prioritas">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+
+            <label for="task-date" style="display:none;">Tanggal</label>
             <input type="date" id="task-date" class="todo-date"> 
             
             <button class="add-btn" type="submit" aria-label="Tambah Tugas">
@@ -46,8 +56,8 @@
             </button>
         </form>
 
-        <section class="control-group" aria-label="Kontrol Daftar">
-            <select class="filter-todo" aria-label="Filter Status Tugas">
+        <section class="control-group">
+            <select class="filter-todo" aria-label="Filter Status">
                 <option value="all">Semua</option>
                 <option value="completed">Selesai</option>
                 <option value="uncompleted">Belum</option>
@@ -55,7 +65,7 @@
             <button class="delete-all-btn">Hapus Semua</button>
         </section>
 
-        <section class="todo-container" aria-label="Daftar Tugas">
+        <section class="todo-container">
             <ul class="todo-list">
                 </ul>
             
